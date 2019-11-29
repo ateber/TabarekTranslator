@@ -1,0 +1,371 @@
+#shortcutPopupIconRoot{
+    -fx-padding:1        ;
+}
+
+#favoriteButtonTool {
+    -fx-border-style: solid outside ;
+    -fx-border-width: 1 1 1 0  ;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+    -fx-background-image: url('/Icon/favoriteButtonTool.png');
+    -fx-background-size: 20px,20px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-radius: 0;
+    -fx-background-radius: 10em;
+    -fx-font-size: 5;
+}
+#favoriteButtonTool:hover {
+    -fx-background-image: url('/Icon/favoriteButtonTool2.png');
+}
+
+#translationButtonTool {
+    -fx-border-style: solid outside ;
+    -fx-border-width: 1 1 1 1  ;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+    -fx-background-image: url('/Icon/translationButtonTool.png');
+    -fx-background-size: 20px, 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-radius: 0;
+    -fx-background-radius: 10em;
+    -fx-font-size: 5;
+}
+#translationButtonTool:hover {
+    -fx-background-image: url('/Icon/translationButtonTool2.png');
+}
+
+#speechButtonTool{
+     -fx-border-style: solid outside ;
+    -fx-border-width: 1 1 1 0  ;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+    -fx-background-size: 20px, 20px;
+    -fx-background-image: url('/Icon/speechButtonTool.png');
+    -fx-padding: 0;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-radius: 0;
+    -fx-background-radius: 10em;
+    -fx-font-size: 5;
+}
+#speechButtonTool:hover {
+    -fx-background-image: url('/Icon/speechButtonTool2.png');
+}
+
+#swapButton{
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+    -fx-background-image: url('/Icon/swap.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 15 15;
+    -fx-background-color: transparent;
+}
+
+#swapButton:hover{
+    -fx-background-size: 18 18;
+    -fx-background-image: url('/Icon/swap2.png');
+    -fx-cursor: hand;
+}
+
+#speechButton{
+
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+    -fx-background-image: url('/Icon/speech.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20 20;
+    -fx-background-color: transparent;
+
+}
+
+#speechButton:hover{
+    -fx-background-size: 23 23;
+     -fx-cursor: hand;
+}
+
+
+
+#green {
+    -fx-min-width: 16px;
+    -fx-min-height: 16x;
+    -fx-max-width: 16x;
+    -fx-max-height: 16px;
+    -fx-font-size: 5;
+    -fx-background-image: url('/Icon/exit.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 16 16;
+    -fx-background-color: transparent;
+
+}
+
+#green:hover{
+    -fx-background-image: url('/Icon/exit2.png');
+}
+
+
+#check-box  {
+
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+}
+
+#check-box>.box {
+
+    -fx-background-insets: 0 ;
+    -fx-background-radius: 0 ;
+    -fx-padding: 0 ;
+    -fx-background-color: transparent;
+
+}
+
+#check-box .box  .mark {
+
+    -fx-padding: 0 ;
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+    -fx-background-image: url("/Icon/fav1.png");
+    -fx-background-size: 20 20;
+    -fx-background-position: center;
+    -fx-shape: null;
+
+}
+
+#check-box:hover>.box>.mark   {
+    -fx-background-size: 23 23;
+    -fx-cursor: hand;
+}
+
+#check-box:selected>.box>.mark{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/Icon/fav2.png");
+}
+
+#titleBarLanguageLabel{
+     -fx-font-family: "Arial";
+     -fx-text-fill: linear-gradient(white, #d0d0d0);
+     -fx-font-size: 12px;
+     -fx-font-weight:bold;
+}
+
+#titleBarHBox{
+    -fx-background-radius: 8  ;
+    -fx-background-color:#090a0c,linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%)
+        ,linear-gradient(#20262b, #191d22)
+        , radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-padding: 3 8 2 5;
+    -fx-spacing: 3;
+    -fx-text-fill: white;
+     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+#mainLayoutVBox{
+    -fx-border-color:  #38424b;
+    -fx-border-style: solid inside;
+    -fx-border-width: 0 0.5 0.5 0.5;
+    -fx-border-radius: 8;
+    -fx-background-radius:8;
+     -fx-background-color: #d0d0d0,radial-gradient(center 50% 0%, radius 100%, rgba(250,250,250,0.9), rgba(255,255,255,0.4));
+}
+
+#mainTranslationTA .scroll-bar:horizontal .thumb,
+#mainTranslationTA .scroll-bar:vertical .thumb {
+    -fx-background-radius: 3em;
+    -fx-background-color:derive(black,95%);
+}
+#mainTranslationTA .scroll-bar:horizontal .track ,
+#mainTranslationTA .scroll-bar:vertical .track{
+    -fx-background-color:transparent;
+    -fx-border-color:derive(gray,80%);
+    -fx-background-radius: 3em;
+    -fx-border-radius:3em;
+}
+#mainTranslationTA .scroll-bar {
+    -fx-background-color:#fcfcfc ;
+    -fx-background-radius: 3em;
+    -fx-border-radius:3em;
+}
+
+#mainTranslationTA .increment-button ,#mainTranslationTA .decrement-button {
+    -fx-background-color:transparent;
+    -fx-padding:2px;
+}
+
+#mainTranslationTA  {
+
+    -fx-text-fill: black;
+    -fx-text-box-border: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-font-family: Consolas;
+    -fx-wrap-text: true;
+    -fx-font-size: 13;
+    /*-fx-font-weight: bold;*/
+    -fx-highlight-fill:  lightslategray;
+    -fx-highlight-text-fill: #000000;
+    /*-fx-background-color: #f6f6f8;*/
+    /*-fx-fill-height: true;*/
+}
+#mainTranslationTA .content{
+    -fx-background-color: white;
+    -fx-border-color:  #38424b;
+    -fx-border-width: 0.3;
+}
+
+
+
+#WordTypesTabPane .tab-header-background{
+   /*-fx-background-color:#090a0c,linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%)
+    ,linear-gradient(#20262b, #191d22)
+    , radial-gradient(center 50% 50%, radius 100%,rgba(220,200,220,0.4), rgba(220,220,220,0.2));  */
+    -fx-background-color: #d0d0d0,radial-gradient(center 50% 0%, radius 100%, rgba(250,250,250,0.9), rgba(255,255,255,0.2));
+
+}
+
+#WordTypesTabPane > .tab-header-area  {
+    -fx-padding: 0 0 0 0;
+}
+#WordTypesTabPane > .tab-content-area > * {
+    -fx-padding: 0 0 4 0;
+    -fx-background-color: transparent ;
+    -fx-border-color:  gainsboro;
+    -fx-border-width: 1 1 0 1;
+}
+
+#WordTypesTabPane > .tab-content-area  * .corner {
+    -fx-background-color: transparent ;
+}
+
+#WordTypesTabPane .tab    {
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color:transparent;
+    -fx-font-family: "Arial";
+    -fx-font-weight:bold;
+    -fx-font-size: 12px;
+}
+
+#WordTypesTabPane .tab-label {
+    -fx-text-fill:    #555555;
+}
+
+/*#WordTypesTabPane  .tab-content-area   {
+    -fx-background-color:#38424b;
+}*/
+
+#WordTypesTabPane .tab:selected   {
+   -fx-border-color:black;
+}
+#hbContent{
+    -fx-background-color:#38424b;
+}
+
+#hbContent .label {
+    -fx-text-fill: white;
+    -fx-font-weight:bold;
+    -fx-font-size: 11px;
+}
+
+#separatorVertical{
+    -fx-orientation:vertical;
+}
+
+#separatorHorizontal .line {
+   -fx-border-width:1;
+   -fx-border-color: black;
+}
+
+#separatorVertical .line{
+
+   -fx-border-width:1;
+   -fx-border-color: black;
+}
+
+.visibleTab  {
+    visibility: hidden ;
+}
+
+.tableStyle  .table-cell   {
+    /*-fx-alignment: CENTER ; */
+    -fx-font-size: 12px;
+    -fx-font-family: "Arial";
+}
+.tableStyle .scroll-bar:horizontal .thumb,
+.tableStyle .scroll-bar:vertical .thumb {
+    -fx-background-radius: 3em;
+    -fx-background-color:derive(black,95%);
+}
+.tableStyle .scroll-bar:horizontal .track ,
+.tableStyle .scroll-bar:vertical .track{
+    -fx-background-color:transparent;
+    -fx-border-color:derive(gray,80%);
+    -fx-background-radius: 3em;
+    -fx-border-radius:3em;
+}
+.tableStyle .scroll-bar {
+    -fx-background-color:#fcfcfc ;
+    -fx-background-radius: 3em;
+    -fx-border-radius:3em;
+}
+.tableStyle  .scroll-bar .increment-arrow,
+.tableStyle  .scroll-bar .decrement-arrow {
+    -fx-background-color: #38424b ;
+    -fx-padding:0;
+}
+.tableStyle .increment-button ,.tableStyle .decrement-button {
+    -fx-background-color:transparent;
+    -fx-padding:2px;
+}
+
+.tableStyle .table-row-cell:odd  {
+    -fx-background-insets: 0 ;
+    -fx-background-color: lightslategray ,radial-gradient(center 50% 50%, radius 100%, rgba(230,230,230,0.9), rgba(255,255,255,0.9));
+}
+.tableStyle .table-row-cell:even{
+    -fx-background-insets:0;
+    -fx-background-color:  #fcfcfc;
+}
+
+
+.contentColumn{
+    -fx-border-width: 0 0 0 2;
+    -fx-alignment: CENTER ;
+}
+
+.translationsTheWordColumn{
+    -fx-border-width: 0 0 0 0.1;
+    -fx-border-color: black;
+}
+
+.progressHB   {
+      -fx-background-color:  transparent;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-background-image: url('/Icon/load.gif');
+    -fx-background-size: 30px,30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+
+}
