@@ -5,11 +5,8 @@
  */
 package tabarektranslator;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,49 +15,9 @@ import java.util.Set;
  * @author ThekME
  */
 public class Helper {
-    
-    private static Connection c = null;
-    private static String connetcionString="jdbc:sqlite:D:\\Projeler\\tabarekTranslator-GitHub\\TabarekTranslatorSourceCode\\src\\Database\\tabarekDB.db";
-    
-    public static String getConnectionString(){
-        return connetcionString;
-    }
-    
-    public static String[] parseSentence(String sentence){
-        String[] words = sentence.split("\\s+");
-        for (int i = 0; i < words.length; i++) { 
-            words[i] = words[i].replaceAll("[^\\w]", "");
-        } 
-        return words;
-    }
-    
-    public static String capitalize(String str,Locale locale )
-    {
-        if(str == null) return str;
-        return str.substring(0, 1).toUpperCase(locale) + str.substring(1);
-    }
-    
-    public static String capitalize(String str)
-    {
-        if(str == null) return str;
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
-    }
-            
-    public static Connection getSQLConnection() throws Exception {
-        if(c == null){
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(getConnectionString());
-        }
-        return c;
-    }
-    
-    
-    
     public static String fixStr(String str){
         return str.replace("'", "''");
     }
-    
-    
     
     private static long b(long a,String b){
         

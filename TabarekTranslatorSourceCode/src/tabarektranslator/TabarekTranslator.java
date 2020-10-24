@@ -64,19 +64,16 @@ public class TabarekTranslator   {
             } */
             if(source.length()>TEXT_LIMIT)
                 source=source.substring(0, TEXT_LIMIT);
-            Response res = Request.Get(TRANSLATION_URL+URLEncoder.encode(source,"UTF-8")+"&tk="+Helper.tk(source)+"&sl="+from+"&tl="+to) 
+            Response res = Request.Get(TRANSLATION_URL2+URLEncoder.encode(source,"UTF-8")+"&tk="+Helper.tk(source)+"&sl="+from+"&tl="+to) 
             .addHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 " +"(KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36" )
             .execute();   
             
             JSONArray jsonResult=new JSONArray( res.returnContent().toString()); 
-            res.discardContent();  
-            //System.out.println(" -> "+jsonResult.toString());
-            
+            res.discardContent(); 
             for(int i=0;i<jsonResult.getJSONArray(0).length();i++){
-                translation+=jsonResult.getJSONArray(0).getJSONArray(i).getString(0); 
+                translation+=jsonResult.getJSONArray(0).getJSONArray(i).getString(0);
             } 
             translationResponse.setTranslation(translation);
-            
             
             JSONArray jsonOtherTranslations ; 
             if(!jsonResult.isNull(1)){
@@ -133,14 +130,10 @@ public class TabarekTranslator   {
                         translationResponse.setPrepositions(words);
                         //System.out.println("prepostion");
                     }
-                    else if(wordType.equals("noun")||wordType.equals("pronoun")){
+                    else if(wordType.equals("noun")){
                         translationResponse.setNoun(words);
-                       //System.out.println("noun");
+                       //.out.println("noun");
                     }
-//                    else if(wordType.equals("pronoun")){    note :  it was accepted as a noun ! example -> " my " me
-//                        translationResponse.setNoun(words);
-//                       //System.out.println("noun");
-//                    }
                 }
             } 
            

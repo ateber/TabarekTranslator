@@ -6,21 +6,7 @@ import java.util.List;
 
  
 public class TranslationResponse {
-    String translation=null;
-    List<TranslationWord> prepositions=null; 
-    List<TranslationWord> adjectives=null; 
-    List<TranslationWord> verbs=null; 
-    List<TranslationWord> adverbs=null; 
-    List<TranslationWord> conjunctions=null; 
-    List<TranslationWord> noun=null; 
-    
-    public void TranslateResponse(){  
-    }
-    
-    public void TranslateResponse(String translation){
-       this.translation=translation;
-    } 
-    
+
     public List<TranslationWord> getAdjectives() {
         return adjectives;
     }
@@ -79,5 +65,23 @@ public class TranslationResponse {
     
     public boolean isSentence() {
         return prepositions==null&&adjectives==null&&verbs==null&&adverbs==null&&conjunctions==null&&noun==null;
-    } 
+    }
+
+    
+    
+    String translation=null;
+    List<TranslationWord> prepositions=null; 
+    List<TranslationWord> adjectives=null; 
+    List<TranslationWord> verbs=null; 
+    List<TranslationWord> adverbs=null; 
+    List<TranslationWord> conjunctions=null; 
+    List<TranslationWord> noun=null; 
+    
+    public void TranslateResponse(){ 
+        
+    }
+    
+    public void TranslateResponse(String translation){
+       this.translation=translation;
+    }
 }
