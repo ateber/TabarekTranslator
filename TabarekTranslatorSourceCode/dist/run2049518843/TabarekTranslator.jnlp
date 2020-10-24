@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="TabarekTranslator.jnlp">
+  <information>
+    <title>TabarekTranslator</title>
+    <vendor>ThekME</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="TabarekTranslator.jar" size="11027511" download="eager" />
+    <jar href="lib\SystemTray-3.17.jar" size="396873" download="eager" />
+    <jar href="lib\commons-codec-1.10.jar" size="284184" download="eager" />
+    <jar href="lib\commons-logging-1.2.jar" size="61829" download="eager" />
+    <jar href="lib\fluent-hc-4.5.6.jar" size="31528" download="eager" />
+    <jar href="lib\httpclient-4.5.6.jar" size="767140" download="eager" />
+    <jar href="lib\httpclient-cache-4.5.6.jar" size="161574" download="eager" />
+    <jar href="lib\httpclient-win-4.5.6.jar" size="17837" download="eager" />
+    <jar href="lib\httpcore-4.4.10.jar" size="326356" download="eager" />
+    <jar href="lib\httpmime-4.5.6.jar" size="41794" download="eager" />
+    <jar href="lib\java-json.jar" size="84697" download="eager" />
+    <jar href="lib\jna-4.4.0.jar" size="1091208" download="eager" />
+    <jar href="lib\jna-platform-4.4.0.jar" size="2281814" download="eager" />
+    <jar href="lib\jnativehook-2.1.0.jar" size="208804" download="eager" />
+    <jar href="lib\slf4j-api-1.8.0-beta2.jar" size="43907" download="eager" />
+    <jar href="lib\sqlite-jdbc-3.23.1.jar" size="6733696" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="TabarekTranslator" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="tabarektranslator.MainApp"  name="TabarekTranslator" />
+  <update check="always"/>
+</jnlp>
