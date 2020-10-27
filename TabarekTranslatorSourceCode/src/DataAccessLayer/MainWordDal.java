@@ -241,6 +241,43 @@ public class MainWordDal {
         return null;
     }
     
+    public ArrayList<MainWord> getDetailConstainInWord(String constain){
+        try {
+            conn=Helper.getSQLConnection();
+            PreparedStatement preparedStatement=conn.prepareStatement(
+                "SELECT MainWords.Id ,MainWords.Word,MainWords.Degree,MainWords.Date ,TargetWords.Id as TargetWordId , TargetWords.Word as TargetWord,TargetWords.Verb, TargetWords.Noun,TargetWords.Adjective,TargetWords.Adverb ,TargetWords.Preposition,TargetWords.Conjunction,TargetWords.Date as TargetWordDate \n" +
+                "FROM MainWords \n" +
+                "INNER JOIN TargetWords ON MainWords.Id=TargetWords.MainWordId \n" +
+                " WHERE instr(LOWER(MainWords.Word), LOWER(?)) > 0"); 
+            preparedStatement.setString(1,constain);
+            ResultSet rs=preparedStatement.executeQuery(); 
+            ArrayList<MainWord> mws=new ArrayList<>();
+             
+            while(rs.next()){
+                MainWord mw=new MainWord();
+                mw.setTargetWord(new TargetWord());     
+                mw.setId(rs.getLong("Id"));
+                mw.setWord(rs.getString("Word"));
+                mw.setDegree(rs.getInt("Degree"));
+                mw.setDate(rs.getInt("Date"));
+                mw.getTargetWord().setId(rs.getLong("TargetWordId"));
+                mw.getTargetWord().setWord(rs.getString("TargetWord"));
+                mw.getTargetWord().setVerb(rs.getString("Verb"));
+                mw.getTargetWord().setNoun(rs.getString("Noun"));
+                mw.getTargetWord().setAdjective(rs.getString("Adjective"));
+                mw.getTargetWord().setAdverb(rs.getString("Adverb"));
+                mw.getTargetWord().setPreposition(rs.getString("Preposition"));
+                mw.getTargetWord().setConjunction(rs.getString("Conjunction"));
+                mw.getTargetWord().setDate(rs.getInt("TargetWordDate"));
+                mws.add(mw) ;                
+            } 
+            return mws;
+        } catch (Exception ex) {
+            System.err.println("getDetailByConstain HATAA "+ex.toString());
+        }
+        return null;
+    }
+    
     public ArrayList<MainWord> getDetail(){
         try {
             conn=Helper.getSQLConnection();

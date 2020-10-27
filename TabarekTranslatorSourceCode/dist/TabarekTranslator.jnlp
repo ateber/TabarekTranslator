@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="TabarekTranslator.jar" size="11029214" download="eager" />
+    <jar href="TabarekTranslator.jar" size="11033308" download="eager" />
     <jar href="lib\SystemTray-3.17.jar" size="396873" download="eager" />
     <jar href="lib\commons-codec-1.10.jar" size="284184" download="eager" />
     <jar href="lib\commons-logging-1.2.jar" size="61829" download="eager" />
@@ -19,6 +19,7 @@
     <jar href="lib\httpcore-4.4.10.jar" size="326356" download="eager" />
     <jar href="lib\httpmime-4.5.6.jar" size="41794" download="eager" />
     <jar href="lib\java-json.jar" size="84697" download="eager" />
+    <jar href="lib\jfoenix-8.0.10.jar" size="2710207" download="eager" />
     <jar href="lib\jna-4.4.0.jar" size="1091208" download="eager" />
     <jar href="lib\jna-platform-4.4.0.jar" size="2281814" download="eager" />
     <jar href="lib\jnativehook-2.1.0.jar" size="208804" download="eager" />

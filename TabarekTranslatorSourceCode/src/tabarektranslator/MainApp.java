@@ -48,6 +48,7 @@ import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
  
  
 import java.util.logging.Level;
@@ -78,6 +79,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Control;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -87,6 +90,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
@@ -98,6 +102,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.FlowPane;
  
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -112,6 +117,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
  
 import javafx.stage.Stage; 
@@ -166,6 +172,8 @@ public class MainApp extends Application{
     boolean shortcutPopupIconEnteredState=false;
     boolean translatorPopupEnteredState=false;
     boolean robotKeyEventState=false;
+    boolean showNewlineState=false;
+            
     String SystemCopyData; 
     
     TextTransfer clip=new TextTransfer();  
@@ -195,7 +203,12 @@ public class MainApp extends Application{
     TargetSentenceDal _targetSentenceDal;
     MainWordsAndSentenceDal _mainWordsAndSentenceDal; 
     
+    ArrayList<MainSentence> mainSentences;
+    ArrayList<MainWord> mainWords;
+    
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    
+    
     
     @Override
     public void start(Stage primaryStage) throws Exception {  
@@ -235,53 +248,23 @@ public class MainApp extends Application{
         } catch ( Exception e) {
             System.out.println("Sistem tepsisi resim bulunamadı.."+e.getMessage()); 
         }
-       
-        MenuItem exit=new MenuItem("Exit"); 
-        MenuItem options=new MenuItem("Options");
         MenuItem wordPool=new MenuItem("Word Pool");
-        MenuItem sentencePool=new MenuItem("Sentence Pool");
+        MenuItem sentencePool=new MenuItem("Sentence Pool"); 
+        MenuItem options=new MenuItem("Options"); 
         MenuItem about=new MenuItem("About");
-        dorkbox.systemTray.Checkbox enableIcon=new dorkbox.systemTray.Checkbox ("Enable T Icon"); 
-        enableIcon.setChecked(true); 
-         
+        dorkbox.systemTray.Checkbox showTIcon=new dorkbox.systemTray.Checkbox ("Show T Icon"); 
+        dorkbox.systemTray.Checkbox cutNewline=new dorkbox.systemTray.Checkbox ("Cut Newline"); 
+        MenuItem exit=new MenuItem("Exit"); 
+        showTIcon.setChecked(true); 
+        cutNewline.setChecked(false);
+        
         wordPool.setCallback(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) { 
                 try{ 
                     Platform.runLater(() -> { 
-                        ArrayList<MainWord> mainWords=_mainWordDal.getDetail();
-                        VBox vb=((VBox)wordPoolStage.getScene().getRoot());
-                        TreeTableView tiw=(TreeTableView)vb.getChildren().get(0);
-                        tiw.getRoot().getChildren().clear();
-                        for(MainWord mw:mainWords){  
-                            TreeItem mainTI=new TreeItem(mw); 
-                            if(mw.getTargetWord().getVerb()!=null){
-                                TreeItem nodeTI=new TreeItem("1,"+mw.getTargetWord().getVerb());
-                                mainTI.getChildren().add(nodeTI);
-                            }
-                            if(mw.getTargetWord().getNoun()!=null){
-                                TreeItem nodeTI=new TreeItem("2,"+mw.getTargetWord().getNoun());
-                                mainTI.getChildren().add(nodeTI);
-                            }
-                            if(mw.getTargetWord().getAdjective()!=null){
-                                TreeItem nodeTI=new TreeItem("3,"+mw.getTargetWord().getAdjective());
-                                mainTI.getChildren().add(nodeTI);
-                            }
-                            if(mw.getTargetWord().getAdverb()!=null){
-                                TreeItem nodeTI=new TreeItem("4,"+mw.getTargetWord().getAdverb());
-                                mainTI.getChildren().add(nodeTI);
-                            }
-                            if(mw.getTargetWord().getPreposition()!=null){
-                                TreeItem nodeTI=new TreeItem("5,"+mw.getTargetWord().getPreposition());
-                                mainTI.getChildren().add(nodeTI);
-                            }
-                            if(mw.getTargetWord().getConjunction()!=null){
-                                TreeItem nodeTI=new TreeItem("6,"+mw.getTargetWord().getConjunction());
-                                mainTI.getChildren().add(nodeTI);
-                            }  
-                            tiw.getRoot().getChildren().add(mainTI);
-                        }
-                        
+                        mainWords=_mainWordDal.getDetail();
+                        putMainWordsToTreeTableView(mainWords); 
                         wordPoolStage.show();
                     }); 
                 }catch(Exception e){
@@ -294,32 +277,24 @@ public class MainApp extends Application{
         sentencePool.setCallback(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ArrayList<MainSentence> mainSentences=_mainSentenceDal.getDetail();
-                VBox vb=((VBox)sentencePoolStage.getScene().getRoot());
-                TreeTableView tiw=(TreeTableView)vb.getChildren().get(0);
-                tiw.getRoot().getChildren().clear();
                 
-                for(MainSentence ms:mainSentences){  
-                    TreeItem mainSentenceTI=new TreeItem(ms); 
-                    TreeItem targetSentenceTI=new TreeItem(ms.getTargetSentence());
-                    mainSentenceTI.getChildren().add(targetSentenceTI);
-                    tiw.getRoot().getChildren().add(mainSentenceTI);
-                } 
-                
+              
                 Platform.runLater(() -> {
+                    mainSentences=_mainSentenceDal.getDetail();
+                    putMainSentencesToTreeTableView(mainSentences);
                     sentencePoolStage.show();
                 }); 
             }
         });
         
-        enableIcon.setCallback((e) -> { 
-            if(enableIcon.getChecked()==false){
+        showTIcon.setCallback((e) -> { 
+            if(showTIcon.getChecked()==false){
                 try {
                     systemTray.setImage(USER_DIR+"/src/Icon/first_icon.png"); 
                 } catch ( Exception ex) {
                     System.out.println("Sistem tepsisi resim bulunamadı.."+ex.getMessage()); 
                 }
-                enableIcon.setChecked(false); 
+                showTIcon.setChecked(false); 
                 
                 GlobalScreen.removeNativeMouseListener(nativeMouseListener);  
             }
@@ -329,10 +304,23 @@ public class MainApp extends Application{
                 } catch ( Exception ex) {
                     System.out.println("Sistem tepsisi resim bulunamadı.."+ex.getMessage()); 
                 }
-                enableIcon.setChecked(true);
+                showTIcon.setChecked(true);
                 GlobalScreen.addNativeMouseListener(nativeMouseListener); 
             } 
         });
+        
+        cutNewline.setCallback((ae) -> {
+            if(cutNewline.getChecked()==false){ 
+                showNewlineState=true;
+                cutNewline.setChecked(false);  
+            }
+            else{  
+                showNewlineState=true;
+                cutNewline.setChecked(true); 
+            } 
+        });
+        
+        
         
         exit.setCallback(new ActionListener() {
             @Override
@@ -349,7 +337,8 @@ public class MainApp extends Application{
         mainMenu.add(options);
         mainMenu.add(about );
         mainMenu.add(new Separator());    
-        mainMenu.add(enableIcon );
+        mainMenu.add(showTIcon );
+        mainMenu.add(cutNewline);
         mainMenu.add(new Separator());         
         mainMenu.add(exit);
         
@@ -964,6 +953,7 @@ public class MainApp extends Application{
                             if( process==0){ 
                                 process=1;  
                                 clickCounter=0;
+                                
                                 processClipboard();
 
                                 Platform.runLater(() -> {
@@ -1029,7 +1019,7 @@ public class MainApp extends Application{
         GlobalScreen.addNativeKeyListener(nativeKeyListener);  
         
     } 
-     
+ 
     private void globalEventConsume(NativeInputEvent event){
         try {
                    Field f = NativeInputEvent.class.getDeclaredField("reserved");
@@ -1043,17 +1033,22 @@ public class MainApp extends Application{
         }
     }
     
-    public void processClipboard(){ 
+    public void processClipboard(){  
         clip.setClipboardContents(""); 
         clipboardText=getSelectedText();  
-        if(clipboardText!=null){
-            System.out.println(clipboardText);
+        
+        if(clipboardText!=null){ 
+            
             clipboardText=clipboardText.trim();
+            
+            if(showNewlineState==true)
+                clipboardText=clipboardText.replaceAll("\n"," " );
             if(clipboardText.isEmpty())
                 clipboardText=null;
+             
         } 
         clip.setClipboardContents(SystemCopyData);  
-    }
+    } 
     
    
     public static void main(String[] args)   {  
@@ -1061,8 +1056,7 @@ public class MainApp extends Application{
         launch(args);  
     } 
      
-    public String getSelectedText(){  
-        System.out.println("geldi");
+    public String getSelectedText(){   
         robotKeyEventState=true;
         robot.keyPress(KeyEvent.VK_CONTROL);
         robot.keyPress (KeyEvent.VK_C); 
@@ -1240,7 +1234,7 @@ public class MainApp extends Application{
     }
     
     void showTool(double posX,double posY,String txt){  
-         
+        System.out.println("geldi ->"+txt);  
         shortcutPopupIcon.setOpacity(0);
         translationStage.setAlwaysOnTop(true); 
         translationStage.setOpacity(0);
@@ -1264,8 +1258,7 @@ public class MainApp extends Application{
             mainLayoutVBox.getChildren().remove(2);  
         }  
  
-        executorService.execute(processToolTask(posX+12, posY+12,txt));
- 
+        executorService.execute(processToolTask(posX+12, posY+12,txt)); 
     }
     
     private Task<Boolean> processToolTask(double posx,double posy,String txt) {
@@ -1318,19 +1311,55 @@ public class MainApp extends Application{
     }  
     
     private void createWordPool(){
+        
         wordPoolStage=new Stage(StageStyle. DECORATED); 
         wordPoolStage.setTitle("Word Pool");  
-        wordPoolStage.getIcons().add( new Image("/Icon/poolIcon.jpg"));
-        //myPoolStage.setAlwaysOnTop(true);
-        
-        VBox rootVB=new VBox();  
-        rootVB.setMinSize(300, 500); 
+        wordPoolStage.getIcons().add( new Image("/Icon/poolIcon.jpg")); 
         
         TreeTableView<Object> treeTableView = new TreeTableView<>();
-        VBox.setVgrow(treeTableView, Priority.ALWAYS); 
-     
+          //myPoolStage.setAlwaysOnTop(true);
+        
+//        Button backBtn=new Button("←");
+//        backBtn.setDisable(true);
+//        backBtn.setCancelButton(true);
+//        backBtn.setFont(Font.font("verdana",FontWeight.BOLD, 14));
+//        backBtn.setPrefSize(30, 10); 
+        Label searchL=new Label("Search :");
+        searchL.setPadding(Insets.EMPTY);
+        searchL.setAlignment(Pos.CENTER);
+        searchL.setPrefHeight(25); 
+        searchL.setFont(Font.font("verdana",FontWeight.BOLD, FontPosture.ITALIC, 12));
+        TextField searchTF=new TextField(); 
+        searchTF.prefWidthProperty().bind(wordPoolStage.widthProperty().subtract(200));
+        searchTF.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.isEmpty()){
+                ArrayList<MainWord> mw=_mainWordDal.getDetail();
+                putMainWordsToTreeTableView(mw);
+            }
+            else{
+                ArrayList<MainWord> mw=_mainWordDal.getDetailConstainInWord(newValue);
+                putMainWordsToTreeTableView(mw); 
+            } 
+           
+            treeTableView.refresh(); 
+        });
+        
+        HBox firstLineHB=new HBox( searchL,searchTF);
+        firstLineHB.setPrefHeight(35);
+        firstLineHB.setPadding(new Insets(0,0,0, 10));
+        firstLineHB.setAlignment(Pos.CENTER_LEFT);
+        firstLineHB.setSpacing(10);
+        
+        VBox rootVB=new VBox(); 
+        rootVB.setMinSize(300, 500); 
+        
         TreeItem rootTI=new TreeItem( );
-
+        
+        VBox.setVgrow(treeTableView, Priority.ALWAYS);   
+        treeTableView.setShowRoot(false);
+        treeTableView.setRoot(rootTI);
+        treeTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY); 
+        
         TreeTableColumn<Object, String> treeTableColumn1 = new TreeTableColumn<>("No");
         TreeTableColumn<Object, String> treeTableColumn2 = new TreeTableColumn<>("Main Word");
         TreeTableColumn<Object, String> treeTableColumn3 = new TreeTableColumn<>("Target Word"); 
@@ -1338,18 +1367,31 @@ public class MainApp extends Application{
         TreeTableColumn<Object, String> treeTableColumn5 = new TreeTableColumn<>("Date");
         TreeTableColumn<Object, String> treeTableColumn6 = new TreeTableColumn<>("Sentences");
  
-        treeTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
-        treeTableView.setId("treeTableView"); 
-        treeTableView.setRowFactory( (param) -> {  //Bozulmaları önlüyor
-            return  new TreeTableRow<Object>(){
-                @Override
-                protected void updateItem(Object item, boolean empty) {
-                    super.updateItem(item, empty); 
-                    setMinHeight(25);
-                } 
-            };
-        });
         
+        
+        
+        treeTableView.setId("treeTableView"); 
+//        treeTableView.setRowFactory( (param) -> {  //Bozulmaları önlüyor
+//            return  new TreeTableRow<Object>(){  
+//                
+//                @Override
+//                protected void updateItem(Object item, boolean empty) { 
+//                    MainWord mw;
+//                    if(item instanceof MainWord){
+//                        mw=(MainWord)item; 
+//                        if(!searchTF.getText().isEmpty()){
+//                            if(mw.getWord().contains(searchTF.getText())){
+//                                System.out.println(param.getRoot().getChildren().size());
+//                                TreeItem<Object> m= param.getRoot().getChildren().get(getIndex()); 
+//                            } 
+//                        }  
+//                    } 
+//                    
+//                    super.updateItem(item, empty); 
+//                    setMinHeight(25);  
+//                } 
+//            };
+//        });  
 //        rootTI. expandedProperty().addListener((observable) -> {
 //            System.out.println(" expanded "+observable.toString());
 //        }); 
@@ -1371,11 +1413,12 @@ public class MainApp extends Application{
         @Override
             public TreeTableCell<Object, String> call(TreeTableColumn<Object, String> param) {
                 return new TreeTableCell<Object, String>() { 
+                     
                     private Text text;
                     @Override
                     public void updateItem(String item, boolean empty) { 
                         super.updateItem(item, empty);
-                        
+                      
                         if (!isEmpty()) {
                             text = new Text(item);
                             text.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
@@ -1580,8 +1623,7 @@ public class MainApp extends Application{
         treeTableView.getColumns().add(treeTableColumn4);
         treeTableView.getColumns().add(treeTableColumn5);
         treeTableView.getColumns().add(treeTableColumn6); 
-        treeTableView.setShowRoot(false);
-        treeTableView.setRoot(rootTI);
+        
        
         
 //        TreeTableView<Object> t = new TreeTableView<Object>();
@@ -1610,7 +1652,7 @@ public class MainApp extends Application{
         
         
         
-        rootVB.getChildren().add(treeTableView); 
+        rootVB.getChildren().addAll(firstLineHB,treeTableView); 
         Scene myPoolScene=new Scene(rootVB);
          
         wordPoolStage.setScene(myPoolScene); 
@@ -1621,13 +1663,40 @@ public class MainApp extends Application{
         sentencePoolStage=new Stage();
         sentencePoolStage.setTitle("Sentece Pool");  
         sentencePoolStage.getIcons().add( new Image("/Icon/poolIcon.jpg"));
-       
+        TreeTableView<Object> treeTableViewSentencePool = new TreeTableView<>(); 
+        
+        
+        Label searchL=new Label("Search :");
+        searchL.setPadding(Insets.EMPTY);
+        searchL.setAlignment(Pos.CENTER);
+        searchL.setPrefHeight(25); 
+        searchL.setFont(Font.font("verdana",FontWeight.BOLD, FontPosture.ITALIC, 12));
+        TextField searchTF=new TextField(); 
+        searchTF.prefWidthProperty().bind(sentencePoolStage.widthProperty().subtract(200));
+        searchTF.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.isEmpty()){
+                ArrayList<MainSentence> mss=_mainSentenceDal.getDetail();
+                putMainSentencesToTreeTableView(mss);
+            }
+            else{
+                ArrayList<MainSentence> mss=_mainSentenceDal.getDetailConstainInSentence(newValue);
+                putMainSentencesToTreeTableView(mss); 
+            }  
+            treeTableViewSentencePool.refresh(); 
+        });
+        
+        HBox firstLineHB=new HBox( searchL,searchTF);
+        firstLineHB.setPrefHeight(35);
+        firstLineHB.setPadding(new Insets(0,0,0, 10));
+        firstLineHB.setAlignment(Pos.CENTER_LEFT);
+        firstLineHB.setSpacing(10);
+        
         VBox rootVB=new VBox();  
         rootVB.setMinSize(950, 500); 
         
-        TreeTableView<Object> treeTableViewSentencePool = new TreeTableView<>();
+            
         VBox.setVgrow(treeTableViewSentencePool, Priority.ALWAYS); 
-        treeTableViewSentencePool.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+        //treeTableViewSentencePool.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
         treeTableViewSentencePool.setId("treeTableView"); 
         treeTableViewSentencePool.setRowFactory( (param) -> {  //Bozulmaları önlüyor
             return  new TreeTableRow<Object>(){
@@ -1645,8 +1714,7 @@ public class MainApp extends Application{
         TreeTableColumn<Object, String> treeTableColumn3 = new TreeTableColumn<>("Degree");
         TreeTableColumn<Object, String> treeTableColumn4 = new TreeTableColumn<>("Date");
          
-        treeTableColumn1.setMinWidth(50);
-        treeTableColumn1.setMaxWidth(100); 
+        treeTableColumn1.prefWidthProperty().bind(treeTableViewSentencePool.widthProperty().multiply(0.07)); 
         treeTableColumn1.setCellValueFactory((cellData) -> { 
             TreeItem<Object> rowItem = cellData.getValue(); 
             
@@ -1656,7 +1724,8 @@ public class MainApp extends Application{
             return new ReadOnlyObjectWrapper<>("");  
         });
          
-        treeTableColumn2.setMinWidth(400); 
+        //treeTableColumn2.setMinWidth(400);  
+        treeTableColumn2.prefWidthProperty().bind(treeTableViewSentencePool.widthProperty().multiply(0.65));
         treeTableColumn2.setCellValueFactory((cellData) -> {  
             Object mainOrTargetSentence=null;
             TreeItem<Object> rowItem = cellData.getValue(); 
@@ -1668,31 +1737,105 @@ public class MainApp extends Application{
             }   
             return new SimpleObjectProperty(mainOrTargetSentence);  
         });
+         
         treeTableColumn2.setCellFactory((param) -> {
             return new TreeTableCell<Object, Object>(){
-                private Text text;
+               
                 @Override
                 protected void updateItem(Object item, boolean empty) { 
                     super.updateItem(item, empty);  
+                    setGraphic(null);
                     if (!isEmpty()) { 
-                        text = new Text(); 
+                        
+                        Text text = new Text(); 
+                        TextFlow tf=new TextFlow();   
                         if (item != null && (item instanceof MainSentence)){
-                            MainSentence ms=(MainSentence)item; 
-                            text.setText(ms.getSentence());   
-                            text.setFill(Color.color(0.1, 0.1, 0.3));
-                            text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13)); 
+                            if(!searchTF.getText().isEmpty()){  
+                                String searchedText=searchTF.getText().toLowerCase(Locale.ENGLISH); 
+                              
+                                
+                                MainSentence ms=(MainSentence)item;
+                                
+                                String orginalSentence=ms.getSentence();
+                                String lowerSentence=orginalSentence.toLowerCase(Locale.ENGLISH);
+                                
+                                text.setText(orginalSentence);
+                             
+                                text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13));
+                                text.wrappingWidthProperty().bind(param.widthProperty().subtract(20)); 
+                                text.wrappingWidthProperty().addListener((observable) -> {  
+                                    tf.setPrefHeight(text.getLayoutBounds().getHeight());
+                                    treeTableViewSentencePool.refresh();
+                                });
                            
+                                
+                                tf.setPrefHeight(text.getLayoutBounds().getHeight());
+                                int tempIndex=0;
+                                int index=lowerSentence.indexOf(searchedText,tempIndex);
+                                while(index>-1){ 
+                                    if(index>0){
+                                        String previousString=orginalSentence.substring(0, index);
+                                        String highlightedString=orginalSentence.substring(index, index+searchedText.length());
+
+                                        int newStartIndexOfSentence=index+searchedText.length(); 
+                                        lowerSentence=lowerSentence.substring(newStartIndexOfSentence);
+                                        orginalSentence=orginalSentence.substring(newStartIndexOfSentence);
+
+                                        Text previousText=new Text(previousString); 
+                                        Text highlightedText=new Text(highlightedString);
+
+                                        previousText.setFill(Color.color(0.1, 0.1, 0.3));
+                                        previousText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13)); 
+                                        //previousText.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
+                                        
+                                        //highlightedText.wrappingWidthProperty().bind(param.widthProperty().subtract(5));  
+                                        highlightedText.setFill(Color.color(0.1, 0.7, 0.1));
+                                        highlightedText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13)); 
+
+                                        tf.getChildren().addAll(previousText,highlightedText); 
+                                    }
+                                    else{
+                                        String highlightedString=orginalSentence.substring(0, searchedText.length()); 
+                                        lowerSentence=lowerSentence.substring(searchedText.length());
+                                        orginalSentence=orginalSentence.substring(searchedText.length());
+                                        Text highlightedText=new Text(highlightedString);
+                                        highlightedText.setFill(Color.color(0.1, 0.7, 0.1));
+                                        highlightedText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13));  
+                                        //highlightedText.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
+                                        tf.getChildren().add(highlightedText);
+                                    }
+                                    index=lowerSentence.indexOf(searchedText); 
+                                }
+                                if(orginalSentence.length()>0){
+                                     
+                                    Text latestText=new Text(orginalSentence);
+                                    latestText.setFill(Color.color(0.1, 0.1, 0.3));
+                                    latestText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13)); 
+                                    //latestText.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
+                                    tf.getChildren().add(latestText);
+                                }
+                                if(tf.getChildren().size()>0){  
+                                    setGraphic(tf);  
+                                } 
+                            }
+                            else{
+                                System.out.println("geldi 1");
+                                MainSentence ms=(MainSentence)item; 
+                                text.setText(ms.getSentence());   
+                                text.setFill(Color.color(0.1, 0.1, 0.3));
+                                text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13));
+                                text.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
+                                setGraphic(text);  
+                            } 
                         }  
                         else if (item != null && (item instanceof TargetSentence)){
+                            System.out.println("geldi 2");
                             text.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.ITALIC, 13));
                             TargetSentence ts=(TargetSentence)item;  
                             text.setText(ts.getSentence());   
-                        }     
-                        text.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
-                        setGraphic(text);    
-                    }
-                    else{ 
-                        setGraphic(null); 
+                            text.wrappingWidthProperty().bind(param.widthProperty().subtract(5)); 
+                            setGraphic(text);    
+                        } 
                     }  
                 }  
             }; 
@@ -1700,8 +1843,7 @@ public class MainApp extends Application{
         
         
         treeTableColumn3.getStyleClass().add("column4");
-        treeTableColumn3.setMinWidth(70);
-        treeTableColumn3.setMaxWidth(200); 
+        treeTableColumn3.prefWidthProperty().bind(treeTableViewSentencePool.widthProperty().multiply(0.10));
         treeTableColumn3.setCellValueFactory((cellData) -> { 
             TreeItem<Object> rowItem = cellData.getValue(); 
             if (rowItem != null && (rowItem.getValue() instanceof MainSentence)){
@@ -1714,10 +1856,9 @@ public class MainApp extends Application{
             }   
             return new SimpleStringProperty(""); 
         });
-        
+    
         treeTableColumn4.getStyleClass().add("column5");
-        treeTableColumn4.setMinWidth(100);
-        treeTableColumn4.setMaxWidth(120);
+        treeTableColumn4.prefWidthProperty().bind(treeTableViewSentencePool.widthProperty().multiply(0.18));
         treeTableColumn4.setCellValueFactory((cellData) -> { 
             TreeItem<Object> rowItem = cellData.getValue(); 
             if (rowItem != null && (rowItem.getValue() instanceof MainSentence)){
@@ -1734,11 +1875,11 @@ public class MainApp extends Application{
         treeTableViewSentencePool.getColumns().add(treeTableColumn3);
         treeTableViewSentencePool.getColumns().add(treeTableColumn4); 
         treeTableViewSentencePool.setShowRoot(false);
-        treeTableViewSentencePool.setRoot(rootTI);  
-        rootVB.getChildren().add(treeTableViewSentencePool); 
-        Scene sentencePoolScene=new Scene(rootVB); 
-        sentencePoolStage.setScene(sentencePoolScene); 
+        treeTableViewSentencePool.setRoot(rootTI);
         
+        rootVB.getChildren().addAll(firstLineHB,treeTableViewSentencePool); 
+        Scene sentencePoolScene=new Scene(rootVB); 
+        sentencePoolStage.setScene(sentencePoolScene);  
     }
     
     public Object addWordOrSentence(String mainText,String targetText,int degree, TranslationResponse translationResponse){
@@ -1837,8 +1978,52 @@ public class MainApp extends Application{
         } 
     }
     
+    private void putMainWordsToTreeTableView(ArrayList<MainWord> mainwords){
+        VBox vb=((VBox)wordPoolStage.getScene().getRoot());
+        TreeTableView tiw=(TreeTableView)vb.getChildren().get(1);
+        tiw.getRoot().getChildren().clear();
+        for(MainWord mw:mainwords){  
+            TreeItem mainTI=new TreeItem(mw); 
+            if(mw.getTargetWord().getVerb()!=null){
+                TreeItem nodeTI=new TreeItem("1,"+mw.getTargetWord().getVerb());
+                mainTI.getChildren().add(nodeTI);
+            }
+            if(mw.getTargetWord().getNoun()!=null){
+                TreeItem nodeTI=new TreeItem("2,"+mw.getTargetWord().getNoun());
+                mainTI.getChildren().add(nodeTI);
+            }
+            if(mw.getTargetWord().getAdjective()!=null){
+                TreeItem nodeTI=new TreeItem("3,"+mw.getTargetWord().getAdjective());
+                mainTI.getChildren().add(nodeTI);
+            }
+            if(mw.getTargetWord().getAdverb()!=null){
+                TreeItem nodeTI=new TreeItem("4,"+mw.getTargetWord().getAdverb());
+                mainTI.getChildren().add(nodeTI);
+            }
+            if(mw.getTargetWord().getPreposition()!=null){
+                TreeItem nodeTI=new TreeItem("5,"+mw.getTargetWord().getPreposition());
+                mainTI.getChildren().add(nodeTI);
+            }
+            if(mw.getTargetWord().getConjunction()!=null){
+                TreeItem nodeTI=new TreeItem("6,"+mw.getTargetWord().getConjunction());
+                mainTI.getChildren().add(nodeTI);
+            }  
+            tiw.getRoot().getChildren().add(mainTI);
+        }
+    }
     
-    
+    private void putMainSentencesToTreeTableView(ArrayList<MainSentence> mainsentences){ 
+        VBox vb=((VBox)sentencePoolStage.getScene().getRoot());
+        TreeTableView tiw=(TreeTableView)vb.getChildren().get(1);  /// buna bir çözüm bull
+        tiw.getRoot().getChildren().clear(); 
+
+        for(MainSentence ms:mainsentences){  
+            TreeItem mainSentenceTI=new TreeItem(ms); 
+            TreeItem targetSentenceTI=new TreeItem(ms.getTargetSentence());
+            mainSentenceTI.getChildren().add(targetSentenceTI);
+            tiw.getRoot().getChildren().add(mainSentenceTI);
+        }       
+    }
     
     
     

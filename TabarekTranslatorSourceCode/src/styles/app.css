@@ -417,7 +417,7 @@
 }
  
 .column4{
-    -fx-alignment: CENTER_LEFT; 
+    -fx-alignment: CENTER; 
 }
 
 .column4.tree-table-cell{
@@ -446,3 +446,5 @@
 #favoriteBtn{ 
     -fx-padding: 10; 
 }
+
+ 

@@ -25,15 +25,17 @@ public final class TextTransfer implements ClipboardOwner {
     }
  
     public void setClipboardContents(String string){
-        StringSelection stringSelection = new StringSelection(string);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, this); 
+        if(string!=null){
+            StringSelection stringSelection = new StringSelection(string); 
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();  
+            clipboard.setContents(stringSelection, this); 
+        } 
     }
- 
+        
     public String getClipboardContents() {
         String result = "";
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        
+       
         //odd: the Object param of getContents is not currently used
         Transferable contents = clipboard.getContents(null);
         boolean hasTransferableText =

@@ -211,7 +211,7 @@ public class MainSentenceDal {
             System.err.println("getDetail HATAA "+ex.toString());
         }
         return null;
-    }
+    } 
     
     public MainSentence getDetailBySentence(String sentence){
         try {
@@ -236,6 +236,37 @@ public class MainSentenceDal {
                 
                 return ms;                
             } 
+        } catch (Exception ex) {
+            System.err.println("getDetail HATAA "+ex.toString());
+        }
+        return null;
+    }
+    
+    public ArrayList<MainSentence> getDetailConstainInSentence(String constain){
+        try {
+            conn=Helper.getSQLConnection();
+            PreparedStatement preparedStatement=conn.prepareStatement(
+                "SELECT MainSentences.Id, MainSentences.Sentence, MainSentences.Degree, MainSentences.Date, TargetSentences.Id as TargetSentenceId, TargetSentences.Sentence as TargetSentence, TargetSentences.Date as TargetSentenceDate\n" +
+                "FROM MainSentences \n" +
+                "INNER JOIN TargetSentences ON MainSentences.Id=TargetSentences.MainSentenceId \n" +
+                "WHERE instr(LOWER(MainSentences.Sentence), LOWER(?)) > 0");
+            preparedStatement.setString(1,constain);
+            ResultSet rs=preparedStatement.executeQuery(); 
+            
+            ArrayList<MainSentence> mss=new ArrayList<>();
+            while(rs.next()){
+                MainSentence ms=new MainSentence();
+                ms.setTargetSentence(new TargetSentence());     
+                ms.setId(rs.getLong("Id"));
+                ms.setSentence(rs.getString("Sentence"));
+                ms.setDegree(rs.getInt("Degree"));
+                ms.setDate(rs.getInt("Date"));
+                ms.getTargetSentence().setSentence(rs.getString("TargetSentence"));
+                ms.getTargetSentence().setId(rs.getLong("TargetSentenceId"));
+                ms.getTargetSentence().setDate(rs.getInt("TargetSentenceDate"));  
+                mss.add(ms);
+            } 
+            return mss;
         } catch (Exception ex) {
             System.err.println("getDetail HATAA "+ex.toString());
         }
