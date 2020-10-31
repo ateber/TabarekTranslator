@@ -1,7 +1,9 @@
  
 package DataAccessLayer;
  
+import Entities.MainSentence;
 import Entities.MainWord;
+import Entities.TargetSentence;
 import Entities.TargetWord;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -312,4 +314,39 @@ public class MainWordDal {
         }
         return null;
     } 
+    
+    public ArrayList<MainSentence> getRelatedSentence(long id){
+        try {
+            conn=Helper.getSQLConnection(); 
+            PreparedStatement preparedStatement=conn.prepareStatement( 
+                "SELECT MainSentences.Id,MainSentences.Sentence,MainSentences.Degree,MainSentences.Date,\n" +
+                "TargetSentences.Id as TargetSentenceId, TargetSentences.Sentence as TargetSentence, TargetSentences.Date as TargetSentenceDate\n" +
+                "FROM MainWords\n" +
+                "INNER JOIN MainWordsAndSentences ON MainWordsAndSentences.MainWordId=MainWords.Id\n" +
+                "INNER JOIN MainSentences ON MainWordsAndSentences.MainSentenceId=MainSentences.Id\n" +
+                "INNER JOIN TargetSentences ON MainSentences.Id=TargetSentences.MainSentenceId \n" +
+                "WHERE MainWords.Id=?"
+            ); 
+            preparedStatement.setLong(1,id);
+            ResultSet rs=preparedStatement.executeQuery(); 
+            ArrayList<MainSentence> mss=new ArrayList<>();
+            while(rs.next()){
+                MainSentence ms=new MainSentence();
+                ms.setTargetSentence(new TargetSentence());     
+                ms.setId(rs.getLong("Id"));
+                ms.setSentence(rs.getString("Sentence"));
+                ms.setDegree(rs.getInt("Degree"));
+                ms.setDate(rs.getInt("Date"));
+                ms.getTargetSentence().setSentence(rs.getString("TargetSentence"));
+                ms.getTargetSentence().setId(rs.getLong("TargetSentenceId"));
+                ms.getTargetSentence().setDate(rs.getInt("TargetSentenceDate")); 
+                mss.add(ms);
+            } 
+            return mss;  
+        } catch (Exception ex) {
+            System.err.println("getDetail HATAA "+ex.toString());
+        }
+        return null;
+    } 
+    
 }
