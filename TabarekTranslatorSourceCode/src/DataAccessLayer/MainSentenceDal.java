@@ -242,7 +242,7 @@ public class MainSentenceDal {
         return null;
     }
     
-    public ArrayList<MainSentence> getDetailConstainInSentence(String constain){
+    public ArrayList<MainSentence> getDetailIncludingInSentence(String string){
         try {
             conn=Helper.getSQLConnection();
             PreparedStatement preparedStatement=conn.prepareStatement(
@@ -250,7 +250,7 @@ public class MainSentenceDal {
                 "FROM MainSentences \n" +
                 "INNER JOIN TargetSentences ON MainSentences.Id=TargetSentences.MainSentenceId \n" +
                 "WHERE instr(LOWER(MainSentences.Sentence), LOWER(?)) > 0");
-            preparedStatement.setString(1,constain);
+            preparedStatement.setString(1,string);
             ResultSet rs=preparedStatement.executeQuery(); 
             
             ArrayList<MainSentence> mss=new ArrayList<>();
