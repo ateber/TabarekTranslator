@@ -965,36 +965,33 @@ public class MainApp extends Application{
 
                             if( process==0){ 
                                 process=1;  
-                                clickCounter=0;
-                                
-                                processClipboard();
-
+                                clickCounter=0; 
+                                processClipboard(); 
                                 Platform.runLater(() -> {
                                     showShorcutPopupIcon(nme.getX() ,nme.getY() );
                                 });
                                 process=0;
                             }
                         }
-                        else{
-
+                        else{ 
                             if(timer!=null){
                                 timer.cancel();  
-                            } 
-
+                            }  
                             clickCounter+=1; 
                             timer= new Timer();
+                        
                             timer.schedule(new TimerTask() {
                                 @Override
-                                public void run() {  
-                                    if(clickCounter>1) {
-                                        Platform.runLater(() -> {
-                                            processClipboard();
-                                            showShorcutPopupIcon(nme.getX() ,nme.getY() ); 
-                                        }); 
-                                    }
+                                public void run() {   
                                     clickCounter=0; 
                                 }
-                            },300);  
+                            },600);  
+                            if(clickCounter>1) {
+                                Platform.runLater(() -> {
+                                    processClipboard();
+                                    showShorcutPopupIcon(nme.getX() ,nme.getY() ); 
+                                }); 
+                            }
                         }
                     } 
                 });

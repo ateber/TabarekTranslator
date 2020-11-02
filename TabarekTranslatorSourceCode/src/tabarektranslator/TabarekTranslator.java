@@ -132,7 +132,7 @@ public class TabarekTranslator   {
                     }
                     else if(wordType.equals("preposition")){
                         translationResponse.setPrepositions(words);
-                        System.out.println("prepostion");
+                        //System.out.println("preposition");
                     }
                     else if(wordType.equals("noun")||wordType.equals("pronoun")){
                         translationResponse.setNoun(words);
