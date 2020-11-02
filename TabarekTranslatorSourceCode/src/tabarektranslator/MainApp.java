@@ -359,7 +359,7 @@ public class MainApp extends Application{
                 int index=favoriteStars.indexOf(iv);  
                 
                 if(favoriteDialog.getUserData()!=null){
-                     
+                    System.out.println("kontrol 1"); 
                     if(favoriteDialog.getUserData() instanceof MainWord){
                         MainWord mw=(MainWord)favoriteDialog.getUserData();
                         mw.setDegree(index+1);
@@ -428,7 +428,7 @@ public class MainApp extends Application{
         
         favoriteDialog.setAlwaysOnTop(true);
         favoriteDialog.initOwner(stg);
-        favoriteDialog.setScene(dialogScene);
+        favoriteDialog.setScene(dialogScene); 
         //favoriteDialog.initModality(Modality.APPLICATION_MODAL);
         favoriteDialog.initStyle(StageStyle.TRANSPARENT);
        
@@ -518,25 +518,33 @@ public class MainApp extends Application{
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 //System.out.println("");
                 if(favoriteDialog.getUserData()!=null){ 
-                     
+                    System.out.println("GELDİ 1"); 
                     if(favoriteDialog.isShowing()){ 
                         if(favoriteDialog.getUserData() instanceof MainWord){
                             MainWord mw=(MainWord)favoriteDialog.getUserData();
                             mw.setDegree(3);
                             _mainWordDal.update(mw);
-                            mw.getTargetWord().setWord(mainTranslationTA.getText());
+                            String targetWord=Helper.capitalize(mainTranslationTA.getText());
+                            mw.getTargetWord().setWord(targetWord);
                             _targetWordDal.update(mw.getTargetWord());
+                            System.out.println("GELDİ a"); 
                         }
-                        if(favoriteDialog.getUserData() instanceof MainSentence){ 
+                        else if(favoriteDialog.getUserData() instanceof MainSentence){ 
                             MainSentence ms=(MainSentence)favoriteDialog.getUserData();
                             ms.setDegree(3);
                             _mainSentenceDal.update(ms);
-                            ms.getTargetSentence().setSentence(mainTranslationTA.getText());
+                            String targetSentence=Helper.capitalize(mainTranslationTA.getText());
+                            ms.getTargetSentence().setSentence(targetSentence);
                             _targetSentenceDal.update(ms.getTargetSentence());
+                             System.out.println("GELDİ b"); 
+
+                        }
+                        else{
+                            addWordOrSentence(translatedText,mainTranslationTA.getText(),3,translation); 
                         }
                         favoriteDialog.hide();
                         translationStage.toFront();
-                        addWordOrSentence(translatedText,mainTranslationTA.getText(),3,translation); 
+                       
                     } 
                     else{ 
                         //favoriteCB.setSelected(false);  
@@ -549,13 +557,17 @@ public class MainApp extends Application{
           
                 else{  
                     if(favoriteDialog.isShowing()&&newValue ){  
+                        System.out.println("GELDİ 2"); 
                         favoriteDialog.hide();
                         translationStage.toFront();
                         Object text=addWordOrSentence(translatedText,mainTranslationTA.getText(),3,translation);
                         favoriteDialog.setUserData(text); 
                     } 
                     else {
-                        favoriteCB.setSelected(false); 
+                        System.out.println("GELDİ 3"); 
+                        favoriteCB.selectedProperty().removeListener(this);
+                        favoriteCB.setSelected(false);
+                        favoriteCB.selectedProperty().addListener(this);   
                         favoriteDialog.setX(translationStage.getX()+favoriteCB.getLayoutX()-31 );
                         favoriteDialog.setY(translationStage.getY()+favoriteCB.getLayoutY()-20);  
                         favoriteDialog.show(); 
@@ -727,8 +739,8 @@ public class MainApp extends Application{
                         mainTranslationTA.setPrefHeight(firstY- event.getScreenY()+firstHeight);
                 } 
             } 
-            favoriteDialog.setX(translationStage.getX()+favoriteCB.getLayoutX()-41);
-            favoriteDialog.setY(translationStage.getY()+favoriteCB.getLayoutY()-30);  
+            favoriteDialog.setX(translationStage.getX()+favoriteCB.getLayoutX()-31);
+            favoriteDialog.setY(translationStage.getY()+favoriteCB.getLayoutY()-20);  
         });
  
         translationScene.addEventFilter(MouseEvent.MOUSE_MOVED, (event) -> {  

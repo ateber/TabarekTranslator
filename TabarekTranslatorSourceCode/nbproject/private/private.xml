@@ -10,7 +10,7 @@
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>371</line>
+                <line>359</line>
                 <key/>
             </bookmark>
         </file>
@@ -20,7 +20,6 @@
             <file>file:/D:/Projeler/tabarekTranslator-GitHub/TabarekTranslatorSourceCode/src/DataAccessLayer/MainWordDal.java</file>
             <file>file:/D:/Projeler/tabarekTranslator-GitHub/TabarekTranslatorSourceCode/src/tabarektranslator/MainApp.java</file>
             <file>file:/D:/Projeler/tabarekTranslator-GitHub/TabarekTranslatorSourceCode/src/styles/app.css</file>
-            <file>file:/D:/Projeler/tabarekTranslator-GitHub/TabarekTranslatorSourceCode/src/DataAccessLayer/MainSentenceDal.java</file>
             <file>file:/D:/Projeler/tabarekTranslator-GitHub/TabarekTranslatorSourceCode/src/tabarektranslator/TextTransfer.java</file>
         </group>
     </open-files>
