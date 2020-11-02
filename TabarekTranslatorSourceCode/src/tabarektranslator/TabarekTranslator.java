@@ -81,6 +81,7 @@ public class TabarekTranslator   {
             JSONArray jsonOtherTranslations ; 
             if(!jsonResult.isNull(1)){
                 jsonOtherTranslations=jsonResult.getJSONArray(1);
+                
                 for(int i=0;i<jsonOtherTranslations.length();i++){
                     //  ---------   what is  TYPE of Word   ------------------- 
                     String wordType=jsonOtherTranslations.getJSONArray(i).getString(0); //adjective,verb ,adverb vs ..
@@ -129,9 +130,9 @@ public class TabarekTranslator   {
                         translationResponse.setConjunctions(words);
                         //System.out.println("preposition");
                     }
-                    else if(wordType.equals("prepostion")){
+                    else if(wordType.equals("preposition")){
                         translationResponse.setPrepositions(words);
-                        //System.out.println("prepostion");
+                        System.out.println("prepostion");
                     }
                     else if(wordType.equals("noun")||wordType.equals("pronoun")){
                         translationResponse.setNoun(words);
