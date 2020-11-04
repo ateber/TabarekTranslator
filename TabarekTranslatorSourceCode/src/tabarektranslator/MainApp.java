@@ -932,8 +932,7 @@ public class MainApp extends Application{
                         else{
                             translationStage.setOpacity(0);
                             favoriteDialog.hide();
-                        }
-                             
+                        } 
                     }); 
                 } 
             } 
@@ -1362,7 +1361,7 @@ public class MainApp extends Application{
         VBox.setVgrow(treeTableView, Priority.ALWAYS);   
         treeTableView.setShowRoot(false);
         treeTableView.setRoot(rootTI);
-        treeTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY); 
+        //treeTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY); 
         
         TreeTableColumn<Object, String> treeTableColumn1 = new TreeTableColumn<>("No");
         TreeTableColumn<Object, String> treeTableColumn2 = new TreeTableColumn<>("Main Word");
@@ -1380,8 +1379,8 @@ public class MainApp extends Application{
 //            System.out.println(" expanded "+observable.toString());
 //        }); 
         
-        treeTableColumn1.setMinWidth(50);
-        treeTableColumn1.setMaxWidth(100);
+         
+        treeTableColumn1.prefWidthProperty().bind(treeTableView.widthProperty().multiply(0.07));
         treeTableColumn1.setCellValueFactory((cellData) -> { 
             TreeItem<Object> rowItem = cellData.getValue(); 
             
@@ -1391,8 +1390,7 @@ public class MainApp extends Application{
             return new ReadOnlyObjectWrapper< >("");  
         });
         
-        treeTableColumn2.setMinWidth(100);
-        treeTableColumn2.setMaxWidth(200);
+        treeTableColumn2.prefWidthProperty().bind(treeTableView.widthProperty().multiply(0.13));
         treeTableColumn2.setCellFactory(new Callback<TreeTableColumn<Object, String>, TreeTableCell<Object, String>>() {
         @Override
             public TreeTableCell<Object, String> call(TreeTableColumn<Object, String> param) {
@@ -1461,9 +1459,8 @@ public class MainApp extends Application{
             return new SimpleStringProperty(word); 
             
         });
-        
-        treeTableColumn3.getStyleClass().add("column3");
-        treeTableColumn3.setMinWidth(500); 
+        treeTableColumn3.prefWidthProperty().bind(treeTableView.widthProperty().multiply(0.5));
+        treeTableColumn3.getStyleClass().add("column3"); 
         treeTableColumn3.setCellFactory(new Callback<TreeTableColumn<Object, String>, TreeTableCell<Object, String>>() {
             @Override
             public TreeTableCell<Object, String> call(TreeTableColumn<Object, String> param) {
@@ -1529,9 +1526,8 @@ public class MainApp extends Application{
             return new SimpleStringProperty(targetWord);
         });
         
-        treeTableColumn4.getStyleClass().add("column4");
-        treeTableColumn4.setMinWidth(70);
-        treeTableColumn4.setMaxWidth(200); 
+        treeTableColumn4.prefWidthProperty().bind(treeTableView.widthProperty().multiply(0.1));
+        treeTableColumn4.getStyleClass().add("column4");          
         treeTableColumn4.setCellValueFactory((cellData) -> { 
             TreeItem<Object> rowItem = cellData.getValue(); 
             if (rowItem != null && (rowItem.getValue() instanceof MainWord)){
@@ -1545,9 +1541,8 @@ public class MainApp extends Application{
             return new SimpleStringProperty(""); 
         });
         
-        treeTableColumn5.getStyleClass().add("column5");
-        treeTableColumn5.setMinWidth(100);
-        treeTableColumn5.setMaxWidth(120);
+        treeTableColumn5.prefWidthProperty().bind(treeTableView.widthProperty().multiply(0.1));
+        treeTableColumn5.getStyleClass().add("column5"); 
         treeTableColumn5.setCellValueFactory((cellData) -> { 
             TreeItem<Object> rowItem = cellData.getValue(); 
             if (rowItem != null && (rowItem.getValue() instanceof MainWord)){
@@ -1558,10 +1553,9 @@ public class MainApp extends Application{
             }   
             return new SimpleStringProperty(""); 
         });
-
-        treeTableColumn6.getStyleClass().add("column6");
-        treeTableColumn6.setMinWidth(80);
-        treeTableColumn6.setMaxWidth(100);
+        
+        treeTableColumn6.prefWidthProperty().bind(treeTableView.widthProperty().multiply(0.1));
+        treeTableColumn6.getStyleClass().add("column6"); 
         treeTableColumn6.setCellValueFactory((param) -> {
             Object mainWord=null;
             TreeItem<Object> rowItem = param.getValue(); 
