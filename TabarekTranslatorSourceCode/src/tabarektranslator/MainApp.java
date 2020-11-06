@@ -2287,7 +2287,7 @@ public class MainApp extends Application{
             MainSentence ms=new MainSentence();
             ms.setSentence(translatedText);
             ms.setDate((int) Instant.now().getEpochSecond());
-            ms.setDegree(5);
+            ms.setDegree(degree);
             long msId=_mainSentenceDal.add(ms);
             ms.setId(msId);
             
