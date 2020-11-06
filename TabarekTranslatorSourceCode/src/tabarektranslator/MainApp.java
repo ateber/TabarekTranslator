@@ -235,7 +235,7 @@ public class MainApp extends Application{
         }  
        
         try {
-            systemTray.setImage(USER_DIR+"/src/Icon/second.png"); 
+            systemTray.setImage(USER_DIR+"/Icon/second.png"); 
         } catch ( Exception e) {
             System.out.println("Sistem tepsisi resim bulunamadı.."+e.getMessage()); 
         }
@@ -279,7 +279,7 @@ public class MainApp extends Application{
         showTIcon.setCallback((e) -> { 
             if(showTIcon.getChecked()==false){
                 try {
-                    systemTray.setImage(USER_DIR+"/src/Icon/first_icon.png"); 
+                    systemTray.setImage(USER_DIR+"/Icon/first_icon.png"); 
                 } catch ( Exception ex) {
                     System.out.println("Sistem tepsisi resim bulunamadı.."+ex.getMessage()); 
                 }
@@ -289,7 +289,7 @@ public class MainApp extends Application{
             }
             else{ 
                 try {
-                    systemTray.setImage(USER_DIR+"/src/Icon/second.png");  // for exe -> systemTray.setImage("Icon/second.png");  
+                    systemTray.setImage(USER_DIR+"/Icon/second.png");  // for exe -> systemTray.setImage("Icon/second.png");  
                 } catch ( Exception ex) {
                     System.out.println("Sistem tepsisi resim bulunamadı.."+ex.getMessage()); 
                 }
