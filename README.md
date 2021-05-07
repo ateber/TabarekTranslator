@@ -1,5 +1,7 @@
 # TabarekTranslator
-TabarekTranslator is my own project in 2018 :)
+TabarekTranslator is my own project in 2018 :) It is unfinished project and I stopped developing since 2018 -.-
+
+
 
 # Screenshots
 
