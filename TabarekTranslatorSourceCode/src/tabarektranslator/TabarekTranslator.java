@@ -33,9 +33,9 @@ import org.json.JSONException;
  * @author ThekME   
  */ 
 public class TabarekTranslator   {
-    private String TRANSLATION_URL="https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=bd&dt=t&q=";
+    private String TRANSLATION_URL="https://translate.googleapis.com/translate_a/single?client=gtx&dt=bd&dt=t&q=";
     private String TRANSLATION_URL2="http://translate.google.com/translate_a/single?client=t&dt=bd&dt=t&q=";
-    private String TRANSLATION_URL3="http://translate.google.com/translate_a/single?client=t&sl=en&tl=tr&dt=bd&dt=t";
+    private String TRANSLATION_URL3="http://translate.google.com/translate_a/single?client=t&dt=bd&dt=t";
     private int TEXT_LIMIT=5000;
     
     public TranslationResponse translate(String source,String from,String to)   { 
@@ -64,13 +64,14 @@ public class TabarekTranslator   {
             } */
             if(source.length()>TEXT_LIMIT)
                 source=source.substring(0, TEXT_LIMIT);
+            
             Response res = Request.Get(TRANSLATION_URL+URLEncoder.encode(source,"UTF-8")+"&tk="+Helper.tk(source)+"&sl="+from+"&tl="+to) 
             .addHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 " +"(KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36" )
             .execute();   
             
             JSONArray jsonResult=new JSONArray( res.returnContent().toString()); 
             res.discardContent();  
-            //System.out.println(" -> "+jsonResult.toString());
+            //System.out.println(" -> "+jsonResult.toString()+source+" "+from+" "+to);
             
             for(int i=0;i<jsonResult.getJSONArray(0).length();i++){
                 translation+=jsonResult.getJSONArray(0).getJSONArray(i).getString(0); 
