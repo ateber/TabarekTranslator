@@ -17,10 +17,9 @@ import java.util.Set;
  *
  * @author ThekME
  */
-public class Helper {
-    
+public class Helper { 
     private static Connection c = null;
-    private static String connetcionString="jdbc:sqlite:D:\\Projeler\\tabarekTranslator-GitHub\\TabarekTranslatorSourceCode\\src\\Database\\tabarekDB.db";
+    private static String connetcionString="jdbc:sqlite:"+System.getProperty("user.dir")+"\\Database\\tabarekDB.db";
     
     public static String getConnectionString(){
         return connetcionString;
